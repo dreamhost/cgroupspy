@@ -224,7 +224,7 @@ class VMTree(GroupedTree):
         super(VMTree, self).__init__(*args, **kwargs)
 
     def _create_node(self, name, parent):
-        if b"libvirt-qemu" in name or b"machine-qemu" in name or parent.name == b"qemu":
+        if b"libvirt-qemu" in name or b"machine-qemu" in name or b'lxc.payload' in name or parent.name == b"qemu":
             vm_node = NodeVM(name, parent=parent)
             if isinstance(name, bytes):
                 key = name.decode()
@@ -237,6 +237,7 @@ class VMTree(GroupedTree):
     def get_vm_node(self, name):
         keys = [
             name,
+            'lxc.payload.%s' % name,
             '%s.libvirt-qemu' % name,
             "machine-qemu%s" % name
         ]
